@@ -1,14 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MVC.Models
+namespace Service.Models
 {
-    public class VehicleMake
+    public class VehicleModel
     {
         public Guid Id { get; set; }
+        public Guid? MakeId { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
         public string Abrv { get; set; }
-        public ICollection<VehicleModel> VehicleModels { get; } = new List<VehicleModel>();
+        public VehicleMake? VehicleMake { get; set; }
     }
 }

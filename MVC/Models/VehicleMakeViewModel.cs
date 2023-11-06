@@ -1,4 +1,6 @@
-﻿namespace MVC.Models
+﻿using Service.Models;
+
+namespace MVC.Models
 {
     public class VehicleMakeViewModel
     {
