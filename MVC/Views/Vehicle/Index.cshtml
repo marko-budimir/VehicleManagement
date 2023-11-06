@@ -1,0 +1,26 @@
+﻿@model VehicleModelViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>&#x2714</th>
+            <th>Name</th>
+            <th>Abrv</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.VehicleModels)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Abrv</td>
+            </tr>
+        }
+    </tbody>
+</table>
