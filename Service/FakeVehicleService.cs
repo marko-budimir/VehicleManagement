@@ -23,14 +23,14 @@ namespace Service
         {
             return Task.FromResult(new VehicleModel[]
             {
-                new VehicleModel { Name = "Audi A5", Abrv = "A5", VehicleMake = _vehicleMakes[5]},
-                new VehicleModel { Name = "Audi A6", Abrv = "A6", VehicleMake = _vehicleMakes[5]},
-                new VehicleModel { Name = "Audi A7", Abrv = "A7", VehicleMake = _vehicleMakes[5]},
-                new VehicleModel { Name = "VW Golf 7", Abrv = "Golf 7", VehicleMake = _vehicleMakes[7]},
-                new VehicleModel { Name = "VW Golf 8", Abrv = "Golf 8", VehicleMake = _vehicleMakes[7]},
-                new VehicleModel { Name = "VW Passat", Abrv = "Passat", VehicleMake = _vehicleMakes[7]},
-                new VehicleModel { Name = "BMW G20", Abrv = "BMW 3 Series", VehicleMake = _vehicleMakes[6]},
-                new VehicleModel { Name = "BMW G30", Abrv = "BMW 5 Series", VehicleMake = _vehicleMakes[6]},
+                new VehicleModel { Name = "Audi A5", Abrv = "A5", VehicleMake = _vehicleMakes[4]},
+                new VehicleModel { Name = "Audi A6", Abrv = "A6", VehicleMake = _vehicleMakes[4]},
+                new VehicleModel { Name = "Audi A7", Abrv = "A7", VehicleMake = _vehicleMakes[4]},
+                new VehicleModel { Name = "VW Golf 7", Abrv = "Golf 7", VehicleMake = _vehicleMakes[6]},
+                new VehicleModel { Name = "VW Golf 8", Abrv = "Golf 8", VehicleMake = _vehicleMakes[6]},
+                new VehicleModel { Name = "VW Passat", Abrv = "Passat", VehicleMake = _vehicleMakes[6]},
+                new VehicleModel { Name = "BMW G20", Abrv = "BMW 3 Series", VehicleMake = _vehicleMakes[5]},
+                new VehicleModel { Name = "BMW G30", Abrv = "BMW 5 Series", VehicleMake = _vehicleMakes[5]},
             });
         }
     }
