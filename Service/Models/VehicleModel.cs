@@ -5,7 +5,7 @@ namespace Service.Models
     public class VehicleModel
     {
         public Guid Id { get; set; }
-        public Guid? MakeId { get; set; }
+        public Guid? VehicleMakeId { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
