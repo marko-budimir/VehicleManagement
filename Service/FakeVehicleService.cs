@@ -14,6 +14,17 @@ namespace Service
             new VehicleMake { Name = "Bayerische Motoren Werke AG", Abrv = "BMW" },
             new VehicleMake { Name = "Volkswagen", Abrv = "VW" },
         };
+
+        public Task<bool> AddVehicleMakeAsync(VehicleMake newMake)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> AddVehicleModelAsync(VehicleModel newModel)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<VehicleMake[]> GetVehicleMakesAsync()
         {
             return Task.FromResult(_vehicleMakes);

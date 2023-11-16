@@ -1,0 +1,34 @@
+﻿@model VehicleModelViewModel
+
+@{
+    ViewData["Title"] = "Vehicle Model";
+}
+
+<h1>Vehicle Model</h1>
+
+<p>
+    @await Html.PartialAsync("AddVehicleModel", new VehicleModelDto())
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Abrv</th>
+            <th>VehicleMake</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.VehicleModels)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Abrv</td>
+                <td>@if (item.VehicleMake != null) { @item.VehicleMake.Abrv}</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

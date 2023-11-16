@@ -1,29 +1,27 @@
-﻿@model VehicleModelViewModel
+﻿@model VehicleMakeViewModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Vehicle Make";
 }
 
-<h1>Index</h1>
+<h1>Vehicle Make</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @await Html.PartialAsync("AddVehicleMake", new VehicleMakeDto())
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>Name</th>
             <th>Abrv</th>
-            <th>VehicleMake</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.VehicleModels)
+        @foreach (var item in Model.VehicleMakes)
         {
             <tr>
                 <td>@item.Name</td>
                 <td>@item.Abrv</td>
-                <td>@item.VehicleMake.Abrv</td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                     @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })

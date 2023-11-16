@@ -6,7 +6,7 @@ namespace MVC.DI
     {
         public static IServiceCollection AddVehicleModule(this IServiceCollection services)
         {
-            services.AddSingleton<IVehicleService, FakeVehicleService>();
+            services.AddScoped<IVehicleService, VehicleService>();
             return services;
         }
     }

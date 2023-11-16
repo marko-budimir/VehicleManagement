@@ -1,0 +1,16 @@
+﻿@model VehicleModelDto
+
+<form asp-action="AddVehicleModel" method="POST">
+    <label asp-for="Name">Name:</label>
+    <input asp-for="Name">
+    <br />
+    <label asp-for="Abrv">Abrv:</label>
+    <input asp-for="Abrv">
+    <br />
+    <label asp-for="VehicleMake">VehicleMake:</label>
+    <select asp-for="VehicleMake">
+        <option value="">-- Select Vehicle Make --</option>
+    </select>
+    <br />
+    <button type="submit">Add</button>
+</form>
