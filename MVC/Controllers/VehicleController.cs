@@ -2,6 +2,7 @@
 using MVC.Models;
 using Service;
 using Service.Models;
+using System.Diagnostics;
 
 namespace MVC.Controllers
 {
@@ -14,6 +15,11 @@ namespace MVC.Controllers
             _vehicleService = vehicleService;
         }
 
+        public IActionResult Index()
+        {
+            
+            return View();
+        }
         public async Task<IActionResult> Model()
         {
             var vehicleModel = await _vehicleService.GetVehicleModelsAsync();
@@ -72,6 +78,12 @@ namespace MVC.Controllers
                 return BadRequest("Could not add make.");
             }
             return RedirectToAction("Make");
-        }   
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
     }
 }
