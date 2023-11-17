@@ -7,7 +7,7 @@
 <h1>Vehicle Model</h1>
 
 <p>
-    @await Html.PartialAsync("AddVehicleModel", new VehicleModelDto())
+    @await Html.PartialAsync("AddVehicleModel", new VehicleModelDto(Model.VehicleMakes))
 </p>
 <table class="table">
     <thead>

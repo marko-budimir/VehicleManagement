@@ -29,6 +29,11 @@ namespace Service
             return result == 1;
         }
 
+        public async Task<VehicleMake?> GetVehicleMakeByIdAsync(Guid? id)
+        {
+            return await _dbContext.VehicleMakes.FirstOrDefaultAsync(m => m.Id == id);
+        }
+
         public async Task<VehicleMake[]> GetVehicleMakesAsync()
         {
             return await _dbContext.VehicleMakes.ToArrayAsync();

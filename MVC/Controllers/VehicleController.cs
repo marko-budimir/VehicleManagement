@@ -23,9 +23,11 @@ namespace MVC.Controllers
         public async Task<IActionResult> Model()
         {
             var vehicleModel = await _vehicleService.GetVehicleModelsAsync();
+            var vehicleMake = await _vehicleService.GetVehicleMakesAsync();
             var model = new VehicleModelViewModel
             {
-                VehicleModels = vehicleModel
+                VehicleModels = vehicleModel,
+                VehicleMakes = vehicleMake
             };
             return View(model);
         }
@@ -47,10 +49,12 @@ namespace MVC.Controllers
             {
                 return RedirectToAction("Model");
             }
+            VehicleMake? make = await _vehicleService.GetVehicleMakeByIdAsync(newModel.VehicleMakeId);
             VehicleModel model = new VehicleModel
             {
                 Name = newModel.Name,
-                Abrv = newModel.Abrv
+                Abrv = newModel.Abrv,
+                VehicleMake = make
             };
             var successful = await _vehicleService.AddVehicleModelAsync(model);
             if (!successful)

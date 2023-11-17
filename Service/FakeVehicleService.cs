@@ -25,6 +25,11 @@ namespace Service
             throw new NotImplementedException();
         }
 
+        public Task<VehicleMake?> GetVehicleMakeByIdAsync(Guid? id)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<VehicleMake[]> GetVehicleMakesAsync()
         {
             return Task.FromResult(_vehicleMakes);

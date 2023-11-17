@@ -8,5 +8,6 @@ namespace Service
         Task<VehicleModel[]> GetVehicleModelsAsync();
         Task<bool> AddVehicleModelAsync(VehicleModel newModel);
         Task<bool> AddVehicleMakeAsync(VehicleMake newMake);
+        Task<VehicleMake?> GetVehicleMakeByIdAsync(Guid? id);
     }
 }
