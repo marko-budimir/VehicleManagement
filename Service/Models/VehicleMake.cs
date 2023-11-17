@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Service.Models
 {
+    [Index(nameof(Name), IsUnique = true)]
     public class VehicleMake
     {
         public Guid Id { get; set; }

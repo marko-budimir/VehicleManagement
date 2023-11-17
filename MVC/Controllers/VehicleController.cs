@@ -2,6 +2,7 @@
 using MVC.Models;
 using Service;
 using Service.Models;
+using System.Data;
 using System.Diagnostics;
 
 namespace MVC.Controllers
@@ -56,10 +57,23 @@ namespace MVC.Controllers
                 Abrv = newModel.Abrv,
                 VehicleMake = make
             };
-            var successful = await _vehicleService.AddVehicleModelAsync(model);
+            var successful = false;
+            try {
+                successful = await _vehicleService.AddVehicleModelAsync(model);
+            }
+            catch (DuplicateNameException e)
+            {
+                TempData["ErrorMessage"] = e.Message;
+                return RedirectToAction("Model");
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = e.Message;
+                return RedirectToAction("Model");
+            }
             if (!successful)
             {
-                return BadRequest("Could not add model.");
+                return BadRequest(new { error = "Could not add model." });
             }
             return RedirectToAction("Model");
         }
@@ -76,7 +90,21 @@ namespace MVC.Controllers
                 Name = newMake.Name,
                 Abrv = newMake.Abrv
             };
-            var successful = await _vehicleService.AddVehicleMakeAsync(make);
+            var successful = false;
+            try
+            {
+                successful = await _vehicleService.AddVehicleMakeAsync(make);
+            }
+            catch (DuplicateNameException e)
+            {
+                TempData["ErrorMessage"] = e.Message;
+                return RedirectToAction("Make");
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = e.Message;
+                return RedirectToAction("Make");
+            }
             if (!successful)
             {
                 return BadRequest("Could not add make.");

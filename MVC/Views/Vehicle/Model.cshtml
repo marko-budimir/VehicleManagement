@@ -2,6 +2,14 @@
 
 @{
     ViewData["Title"] = "Vehicle Model";
+    var errorMessage = TempData["ErrorMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <script>
+        alert('@errorMessage');
+    </script>
 }
 
 <h1>Vehicle Model</h1>

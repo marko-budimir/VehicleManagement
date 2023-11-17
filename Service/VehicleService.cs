@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Service.Data;
 using Service.Models;
+using System.Data;
 
 namespace Service
 {
@@ -17,16 +18,44 @@ namespace Service
         {
             newMake.Id = Guid.NewGuid();
             _dbContext.VehicleMakes.Add(newMake);
-            var result = await _dbContext.SaveChangesAsync();
-            return result == 1;
+            try
+            {
+                var result = await _dbContext.SaveChangesAsync();
+                return result == 1;
+            }
+            catch (DbUpdateException e)
+            {
+                if (e.InnerException is not null && e.InnerException.Message.Contains("IX_VehicleMakes_Name"))
+                    throw new DuplicateNameException("Vehicle make name already exists.");
+                else
+                    throw new Exception("An error occurred while saving the vehicle make.");
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public async Task<bool> AddVehicleModelAsync(VehicleModel newModel)
         {
             newModel.Id = Guid.NewGuid();
             _dbContext.VehicleModels.Add(newModel);
-            var result =  await _dbContext.SaveChangesAsync();
-            return result == 1;
+            try
+            {
+                var result = await _dbContext.SaveChangesAsync();
+                return result == 1;
+            }
+            catch (DbUpdateException e)
+            {
+                if (e.InnerException is not null && e.InnerException.Message.Contains("IX_VehicleModels_Name"))
+                    throw new DuplicateNameException("Vehicle model name already exists.");
+                else
+                    throw new Exception("An error occurred while saving the vehicle model.");
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public async Task<VehicleMake?> GetVehicleMakeByIdAsync(Guid? id)
