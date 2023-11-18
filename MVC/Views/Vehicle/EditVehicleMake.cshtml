@@ -1,0 +1,25 @@
+﻿@using Service.Models;
+@model VehicleMake
+
+@{
+    ViewData["Title"] = "Edit Vehicle Make";
+    var errorMessage = TempData["ErrorMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <script>
+        alert('@errorMessage');
+    </script>
+}
+
+<h1>Edit Vehicle Make</h1>
+<form asp-action="UpdateVehicleMake" method="post" asp-route-id="@Model.Id">
+    <label asp-for="Name">Name:</label>
+    <input asp-for="Name" value="@Model.Name">
+    <br />
+    <label asp-for="Abrv">Abrv:</label>
+    <input asp-for="Abrv" value="@Model.Abrv">
+    <br />
+    <button type="submit">Apply</button>
+</form>

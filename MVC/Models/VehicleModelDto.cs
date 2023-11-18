@@ -5,6 +5,7 @@ namespace MVC.Models
 {
     public class VehicleModelDto
     {
+        public Guid Id { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]

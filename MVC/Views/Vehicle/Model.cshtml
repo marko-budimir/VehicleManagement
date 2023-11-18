@@ -33,7 +33,7 @@
                 <td>@item.Abrv</td>
                 <td>@if (item.VehicleMake != null) { @item.VehicleMake.Abrv}</td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Edit", "EditVehicleModel", new { id=item.Id }) |
                     @Html.ActionLink("Delete", "DeleteVehicleModel", new { id=item.Id })
                 </td>
             </tr>

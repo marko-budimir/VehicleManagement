@@ -1,0 +1,28 @@
+﻿@model VehicleModelDto
+
+@{
+    ViewData["Title"] = "Edit Vehicle Model";
+    var errorMessage = TempData["ErrorMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <script>
+        alert('@errorMessage');
+    </script>
+}
+
+<h1>Edit Vehicle Model</h1>
+<form asp-action="UpdateVehicleModel" method="post" asp-route-id="@Model.Id">
+    <label asp-for="Name">Name:</label>
+    <input asp-for="Name" value="@Model.Name">
+    <br />
+    <label asp-for="Abrv">Abrv:</label>
+    <input asp-for="Abrv" value="@Model.Abrv">
+    <br />
+    <select asp-for="VehicleMakeId" asp-items="@(new SelectList(Model._vehicleMakes, "Id", "Name"))">
+        <option value="">-- Select Vehicle Make --</option>
+    </select>
+    <br />
+    <button type="submit">Apply</button>
+</form>

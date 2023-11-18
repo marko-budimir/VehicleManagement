@@ -82,8 +82,6 @@ namespace Service
             }
             catch (Exception e)
             {
-                Console.WriteLine("DeleteVehicleMAkeAsync");
-                Console.WriteLine(e.Message);
                 return false;
             }
         }
@@ -113,9 +111,56 @@ namespace Service
             return await _dbContext.VehicleMakes.ToArrayAsync();
         }
 
+        public async Task<VehicleModel?> GetVehicleModelByIdAsync(Guid? id)
+        {
+            return await _dbContext.VehicleModels.FirstOrDefaultAsync(m => m.Id == id);
+        }
+
         public async Task<VehicleModel[]> GetVehicleModelsAsync()
         {
            return await _dbContext.VehicleModels.ToArrayAsync();
+        }
+
+        public async Task<bool> UpdateVehicleMakeAsync(VehicleMake make)
+        {
+            _dbContext.VehicleMakes.Update(make);
+            try
+            {
+                var result = await _dbContext.SaveChangesAsync();
+                return result == 1;
+            }
+            catch (DbUpdateException e)
+            {
+                if (e.InnerException is not null && e.InnerException.Message.Contains("IX_VehicleMakes_Name"))
+                    throw new DuplicateNameException("Vehicle make name already exists.");
+                else
+                    throw new Exception("An error occurred while updating the vehicle make.");
+            }   
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateVehicleModelAsync(VehicleModel model)
+        {
+            _dbContext.VehicleModels.Update(model);
+            try
+            {
+                var result = await _dbContext.SaveChangesAsync();
+                return result == 1;
+            }
+            catch (DbUpdateException e)
+            {
+                if (e.InnerException is not null && e.InnerException.Message.Contains("IX_VehicleModels_Name"))
+                    throw new DuplicateNameException("Vehicle model name already exists.");
+                else
+                    throw new Exception("An error occurred while updating the vehicle model.");
+            }
+            catch (Exception)
+            {
+                return false;
+            }   
         }
     }
 }
