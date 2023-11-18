@@ -11,6 +11,6 @@ namespace Service.Models
         public string Name { get; set; }
         [Required]
         public string Abrv { get; set; }
-        public ICollection<VehicleModel> VehicleModels { get; } = new List<VehicleModel>();
+        public ICollection<VehicleModel> VehicleModels { get; set; } = new List<VehicleModel>();
     }
 }

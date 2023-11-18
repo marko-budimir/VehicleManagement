@@ -58,6 +58,51 @@ namespace Service
             }
         }
 
+        public async Task<bool> DeleteVehicleMakeAsync(Guid id)
+        {
+            var make = await _dbContext.VehicleMakes.Include(vm => vm.VehicleModels).FirstOrDefaultAsync(m => m.Id == id);
+
+            if (make == null)
+            {
+                return false;
+            }
+
+            
+            foreach (var model in make.VehicleModels)
+            {
+                model.VehicleMake = null;
+            }
+
+            _dbContext.VehicleMakes.Remove(make);
+
+            try
+            {
+                var result = await _dbContext.SaveChangesAsync();
+                return result >= 1;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("DeleteVehicleMAkeAsync");
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteVehicleModelAsync(Guid id)
+        {
+            _dbContext.VehicleModels.Remove(new VehicleModel { Id = id });
+
+            try
+            {
+                var result = await _dbContext.SaveChangesAsync();
+                return result == 1;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public async Task<VehicleMake?> GetVehicleMakeByIdAsync(Guid? id)
         {
             return await _dbContext.VehicleMakes.FirstOrDefaultAsync(m => m.Id == id);

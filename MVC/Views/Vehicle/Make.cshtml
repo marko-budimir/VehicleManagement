@@ -32,7 +32,7 @@
                 <td>@item.Abrv</td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    @Html.ActionLink("Delete", "DeleteVehicleMake", new { id=item.Id })
                 </td>
             </tr>
         }

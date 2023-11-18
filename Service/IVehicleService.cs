@@ -9,5 +9,7 @@ namespace Service
         Task<bool> AddVehicleModelAsync(VehicleModel newModel);
         Task<bool> AddVehicleMakeAsync(VehicleMake newMake);
         Task<VehicleMake?> GetVehicleMakeByIdAsync(Guid? id);
+        Task<bool> DeleteVehicleModelAsync(Guid id);
+        Task<bool> DeleteVehicleMakeAsync(Guid id);
     }
 }

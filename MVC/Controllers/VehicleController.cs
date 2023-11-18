@@ -78,6 +78,16 @@ namespace MVC.Controllers
             return RedirectToAction("Model");
         }
 
+        public async Task<IActionResult> DeleteVehicleModel(Guid id)
+        {
+            var successful = await _vehicleService.DeleteVehicleModelAsync(id);
+            if (!successful)
+            {
+                return BadRequest(new { error = "Could not delete model." });
+            }
+            return RedirectToAction("Model");
+        }
+
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddVehicleMake(VehicleMakeDto newMake)
         {
@@ -108,6 +118,16 @@ namespace MVC.Controllers
             if (!successful)
             {
                 return BadRequest("Could not add make.");
+            }
+            return RedirectToAction("Make");
+        }
+
+        public async Task<IActionResult> DeleteVehicleMake(Guid id)
+        {
+            var successful = await _vehicleService.DeleteVehicleMakeAsync(id);
+            if (!successful)
+            {
+                return BadRequest(new { error = "Could not delete make." });
             }
             return RedirectToAction("Make");
         }
