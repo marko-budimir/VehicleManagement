@@ -1,5 +1,4 @@
-﻿using Service.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MVC.Models
 {
@@ -11,16 +10,17 @@ namespace MVC.Models
         [Required]
         public string Abrv { get; set; }
         public Guid? VehicleMakeId { get; set; }
-        public readonly VehicleMake[]? _vehicleMakes;
+        public VehicleMakeDto? VehicleMake { get; set; }
+        public  VehicleMakeDto[]? vehicleMakes { get; set; }
 
         public VehicleModelDto()
         {
-            _vehicleMakes = null;
+            vehicleMakes = null;
         }
 
-        public VehicleModelDto(VehicleMake[] vehicleMakes)
+        public VehicleModelDto(VehicleMakeDto[] vehicleMakes)
         {
-            _vehicleMakes = vehicleMakes;
+            this.vehicleMakes = vehicleMakes;
         }
     }
 }

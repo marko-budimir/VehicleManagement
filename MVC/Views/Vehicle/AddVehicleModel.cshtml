@@ -8,7 +8,7 @@
     <input asp-for="Abrv">
     <br />
     <label asp-for="VehicleMakeId">VehicleMake:</label>
-    <select asp-for="VehicleMakeId" asp-items="@(new SelectList(Model._vehicleMakes, "Id", "Name"))">
+    <select asp-for="VehicleMakeId" asp-items="@(new SelectList(Model.vehicleMakes, "Id", "Name"))">
         <option value="">-- Select Vehicle Make --</option>
     </select>
     <br />

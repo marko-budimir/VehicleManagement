@@ -20,7 +20,7 @@
     <label asp-for="Abrv">Abrv:</label>
     <input asp-for="Abrv" value="@Model.Abrv">
     <br />
-    <select asp-for="VehicleMakeId" asp-items="@(new SelectList(Model._vehicleMakes, "Id", "Name"))">
+    <select asp-for="VehicleMakeId" asp-items="@(new SelectList(Model.vehicleMakes, "Id", "Name"))">
         <option value="">-- Select Vehicle Make --</option>
     </select>
     <br />

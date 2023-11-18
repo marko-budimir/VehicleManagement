@@ -1,10 +1,8 @@
-﻿using Service.Models;
-
-namespace MVC.Models
+﻿namespace MVC.Models
 {
     public class VehicleModelViewModel
     {
-        public VehicleModel[] VehicleModels { get; set; }
-        public VehicleMake[] VehicleMakes { get; set; }
+        public VehicleModelDto[] VehicleModels { get; set; }
+        public VehicleMakeDto[] VehicleMakes { get; set; }
     }
 }

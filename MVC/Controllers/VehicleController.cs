@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 using Service;
 using Service.Models;
@@ -10,10 +11,12 @@ namespace MVC.Controllers
     public class VehicleController : Controller
     {
         private readonly IVehicleService _vehicleService;
+        private readonly IMapper _mapper;
 
-        public VehicleController(IVehicleService vehicleService)
+        public VehicleController(IVehicleService vehicleService, IMapper mapper)
         {
             _vehicleService = vehicleService;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -23,22 +26,22 @@ namespace MVC.Controllers
         }
         public async Task<IActionResult> Model()
         {
-            var vehicleModel = await _vehicleService.GetVehicleModelsAsync();
-            var vehicleMake = await _vehicleService.GetVehicleMakesAsync();
+            var vehicleModels = await _vehicleService.GetVehicleModelsAsync();
+            var vehicleMakes = await _vehicleService.GetVehicleMakesAsync();
             var model = new VehicleModelViewModel
             {
-                VehicleModels = vehicleModel,
-                VehicleMakes = vehicleMake
+                VehicleModels = _mapper.Map<VehicleModelDto[]>(vehicleModels),
+                VehicleMakes = _mapper.Map<VehicleMakeDto[]>(vehicleMakes)
             };
             return View(model);
         }
 
         public async Task<IActionResult> Make()
         {
-            var vehicleMake = await _vehicleService.GetVehicleMakesAsync();
+            var vehicleMakes = await _vehicleService.GetVehicleMakesAsync();
             var model = new VehicleMakeViewModel
             {
-                VehicleMakes = vehicleMake
+                VehicleMakes = _mapper.Map<VehicleMakeDto[]>(vehicleMakes)
             };
             return View(model);
         }
@@ -50,13 +53,7 @@ namespace MVC.Controllers
             {
                 return RedirectToAction("Model");
             }
-            VehicleMake? make = await _vehicleService.GetVehicleMakeByIdAsync(newModel.VehicleMakeId);
-            VehicleModel model = new VehicleModel
-            {
-                Name = newModel.Name,
-                Abrv = newModel.Abrv,
-                VehicleMake = make
-            };
+            VehicleModel model = _mapper.Map<VehicleModel>(newModel);
             var successful = false;
             try {
                 successful = await _vehicleService.AddVehicleModelAsync(model);
@@ -100,38 +97,30 @@ namespace MVC.Controllers
             {
                 VehicleMakeId = model.VehicleMake.Id;
             }
-            VehicleModelDto modelDto = new VehicleModelDto(await _vehicleService.GetVehicleMakesAsync())
-            {
-                Id = model.Id,
-                Name = model.Name,
-                Abrv = model.Abrv,
-                VehicleMakeId = VehicleMakeId
-            };
+            var vehicleMake = await _vehicleService.GetVehicleMakesAsync();
+            VehicleModelDto modelDto = _mapper.Map<VehicleModelDto>(model);
+            modelDto.vehicleMakes = _mapper.Map<VehicleMakeDto[]>(vehicleMake);
             return View(modelDto);
         }
 
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateVehicleModel(VehicleModelDto model)
+        public async Task<IActionResult> UpdateVehicleModel(VehicleModelDto modelDto)
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("EditVehicleModel", new { id = model.Id });
+                return RedirectToAction("EditVehicleModel", new { id = modelDto.Id });
             }
             var successful = false;
             try
             {
-                successful = await _vehicleService.UpdateVehicleModelAsync( new VehicleModel
-                {
-                    Id = model.Id,
-                    Name = model.Name,
-                    Abrv = model.Abrv,
-                    VehicleMake = await _vehicleService.GetVehicleMakeByIdAsync(model.VehicleMakeId)
-                });
+                var vehicleModel = _mapper.Map<VehicleModel>(modelDto);
+                vehicleModel.VehicleMake = await _vehicleService.GetVehicleMakeByIdAsync(modelDto.VehicleMakeId); ;
+                successful = await _vehicleService.UpdateVehicleModelAsync(vehicleModel);
             }
             catch (Exception e)
             {
                 TempData["ErrorMessage"] = e.Message;
-                return RedirectToAction("EditVehicleModel", new { id = model.Id });
+                return RedirectToAction("EditVehicleModel", new { id = modelDto.Id });
             }
             if (!successful)
             {
@@ -147,11 +136,7 @@ namespace MVC.Controllers
             {
                 return RedirectToAction("Make");
             }
-            VehicleMake make = new VehicleMake
-            {
-                Name = newMake.Name,
-                Abrv = newMake.Abrv
-            };
+            VehicleMake make = _mapper.Map<VehicleMake>(newMake);
             var successful = false;
             try
             {
@@ -191,26 +176,28 @@ namespace MVC.Controllers
             {
                 return NotFound();
             }
-            return View(make);
+            var makeDto = _mapper.Map<VehicleMakeDto>(make);
+            return View(makeDto);
         }
 
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateVehicleMake(VehicleMake make)
+        public async Task<IActionResult> UpdateVehicleMake(VehicleMakeDto makeDto)
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("EditVehicleMake", new { id = make.Id });
+                return RedirectToAction("EditVehicleMake", new { id = makeDto.Id });
             }
            
             var successful = false;
             try
             {
-                successful = await _vehicleService.UpdateVehicleMakeAsync(make);
+                var vehicleMake = _mapper.Map<VehicleMake>(makeDto);
+                successful = await _vehicleService.UpdateVehicleMakeAsync(vehicleMake);
             }
             catch (Exception e)
             {
                 TempData["ErrorMessage"] = e.Message;
-                return RedirectToAction("EditVehicleMake", new { id = make.Id });
+                return RedirectToAction("EditVehicleMake", new { id = makeDto.Id });
             }
             if (!successful)
             {
