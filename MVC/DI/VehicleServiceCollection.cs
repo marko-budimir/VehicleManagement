@@ -6,7 +6,8 @@ namespace MVC.DI
     {
         public static IServiceCollection AddVehicleModule(this IServiceCollection services)
         {
-            services.AddScoped<IVehicleService, VehicleService>();
+            services.AddScoped<IVehicleModelService, VehicleModelService>();
+            services.AddScoped<IVehicleMakeService, VehicleMakeService>();
             return services;
         }
     }

@@ -11,7 +11,7 @@ namespace MVC.Models
         public string Abrv { get; set; }
         public Guid? VehicleMakeId { get; set; }
         public VehicleMakeDto? VehicleMake { get; set; }
-        public  VehicleMakeDto[]? vehicleMakes { get; set; }
+        public VehicleMakeDto[]? vehicleMakes { get; set; }
 
         public VehicleModelDto()
         {
