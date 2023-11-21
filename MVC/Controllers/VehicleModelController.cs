@@ -28,9 +28,13 @@ namespace MVC.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Model()
+        public async Task<IActionResult> Model(VehicleSortOrder sortOrder = VehicleSortOrder.NameAsc)
         {
-            var vehicleModels = await _vehicleModelService.GetAllAsync();
+            ViewData["NameSort"] = sortOrder == VehicleSortOrder.NameDesc ? VehicleSortOrder.NameAsc : VehicleSortOrder.NameDesc;
+            ViewData["AbrvSort"] = sortOrder == VehicleSortOrder.AbrvDesc ? VehicleSortOrder.AbrvAsc : VehicleSortOrder.AbrvDesc;
+            ViewData["MakeNameSort"] = sortOrder == VehicleSortOrder.MakeNameDesc ? VehicleSortOrder.MakeNameAsc : VehicleSortOrder.MakeNameDesc;
+
+            var vehicleModels = await _vehicleModelService.GetAllAsync(sortOrder);
             var vehicleMakes = await _vehicleMakeService.GetAllAsync(VehicleSortOrder.NameAsc);
             var model = new VehicleModelViewModel
             {

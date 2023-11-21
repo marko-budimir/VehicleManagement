@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Service.Data;
+using Service.Enums;
 using Service.Models;
 using System.Data;
 
@@ -56,9 +57,32 @@ namespace Service
             return await _dbContext.VehicleModels.FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task<VehicleModel[]> GetAllAsync()
+        public async Task<VehicleModel[]> GetAllAsync(VehicleSortOrder sortOrder = VehicleSortOrder.NameAsc)
         {
-            return await _dbContext.VehicleModels.ToArrayAsync();
+            var query = _dbContext.VehicleModels.AsQueryable();
+
+            switch(sortOrder)
+            {
+                case VehicleSortOrder.MakeNameAsc:
+                    query = query.OrderBy(m => m.VehicleMake == null ? "" : m.VehicleMake.Abrv);
+                    break;
+                case VehicleSortOrder.MakeNameDesc:
+                    query = query.OrderByDescending(m => m.VehicleMake == null ? "" : m.VehicleMake.Abrv);
+                    break;
+                case VehicleSortOrder.AbrvAsc:
+                    query = query.OrderBy(m => m.Abrv);
+                    break;
+                case VehicleSortOrder.AbrvDesc:
+                    query = query.OrderByDescending(m => m.Abrv);
+                    break;
+                case VehicleSortOrder.NameDesc:
+                    query = query.OrderByDescending(m => m.Name);
+                    break;
+                default:
+                    query = query.OrderBy(m => m.Abrv);
+                    break;
+            }
+            return await query.ToArrayAsync();
         }
 
         public async Task<bool> UpdateAsync(VehicleModel model)

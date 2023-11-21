@@ -5,6 +5,8 @@
         NameAsc,
         NameDesc,
         AbrvAsc,
-        AbrvDesc
+        AbrvDesc,
+        MakeNameAsc,
+        MakeNameDesc
     }
 }

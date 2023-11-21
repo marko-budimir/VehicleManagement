@@ -20,9 +20,9 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Abrv</th>
-            <th>VehicleMake</th>
+            <th><a asp-action="Model" asp-route-sortOrder="@ViewData["NameSort"]">@Html.DisplayNameFor(model => model.VehicleModels[0].Name)</a></th>
+            <th><a asp-action="Model" asp-route-sortOrder="@ViewData["AbrvSort"]">@Html.DisplayNameFor(model => model.VehicleModels[0].Abrv)</a></th>
+            <th><a asp-action="Model" asp-route-sortOrder="@ViewData["MakeNameSort"]">@Html.DisplayNameFor(model => model.VehicleModels[0].VehicleMake)</a></th>
         </tr>
     </thead>
     <tbody>
