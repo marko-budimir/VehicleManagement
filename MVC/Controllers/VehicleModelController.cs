@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 using Service;
+using Service.Enums;
 using Service.Models;
 using System.Data;
 using System.Diagnostics;
@@ -30,7 +31,7 @@ namespace MVC.Controllers
         public async Task<IActionResult> Model()
         {
             var vehicleModels = await _vehicleModelService.GetAllAsync();
-            var vehicleMakes = await _vehicleMakeService.GetAllAsync();
+            var vehicleMakes = await _vehicleMakeService.GetAllAsync(VehicleSortOrder.NameAsc);
             var model = new VehicleModelViewModel
             {
                 VehicleModels = _mapper.Map<VehicleModelDto[]>(vehicleModels),
@@ -86,7 +87,7 @@ namespace MVC.Controllers
             {
                 return NotFound();
             }
-            var vehicleMake = await _vehicleMakeService.GetAllAsync();
+            var vehicleMake = await _vehicleMakeService.GetAllAsync(VehicleSortOrder.NameAsc);
             VehicleModelDto modelDto = _mapper.Map<VehicleModelDto>(model);
             modelDto.vehicleMakes = _mapper.Map<VehicleMakeDto[]>(vehicleMake);
             return View(modelDto);

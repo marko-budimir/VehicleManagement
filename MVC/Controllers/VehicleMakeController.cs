@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 using Service;
+using Service.Enums;
 using Service.Models;
 using System.Data;
 
@@ -18,9 +19,12 @@ namespace MVC.Controllers
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> Make()
+        public async Task<IActionResult> Make(VehicleSortOrder sortOrder = VehicleSortOrder.NameAsc)
         {
-            var vehicleMakes = await _vehicleMakeService.GetAllAsync();
+            ViewData["NameSort"] = sortOrder == VehicleSortOrder.NameDesc ? VehicleSortOrder.NameAsc : VehicleSortOrder.NameDesc;
+            ViewData["AbrvSort"] = sortOrder == VehicleSortOrder.AbrvDesc ? VehicleSortOrder.AbrvAsc : VehicleSortOrder.AbrvDesc;   
+
+            var vehicleMakes = await _vehicleMakeService.GetAllAsync(sortOrder);
             var model = new VehicleMakeViewModel
             {
                 VehicleMakes = _mapper.Map<VehicleMakeDto[]>(vehicleMakes)
