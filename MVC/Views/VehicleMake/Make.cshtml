@@ -17,11 +17,28 @@
 <p>
     @await Html.PartialAsync("AddVehicleMake", new VehicleMakeDto())
 </p>
+<form asp-action="Make" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" /> |
+            <a asp-action="Make">Reset</a>
+        </p>
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>
-            <th><a asp-action="Make" asp-route-pageNumber="@Model.PageNumber" asp-route-sortOrder="@ViewData["NameSort"]">@Html.DisplayNameFor(model => model.VehicleMakes[0].Name)</a></th>
-            <th><a asp-action="Make" asp-route-pageNumber="@Model.PageNumber" asp-route-sortOrder="@ViewData["AbrvSort"]">@Html.DisplayNameFor(model => model.VehicleMakes[0].Abrv)</a></th>
+            <th>
+                <a asp-action="Make"
+                asp-route-SearchString="@ViewData["CurrentFilter"]"
+                asp-route-pageNumber="@Model.PageNumber" 
+                asp-route-sortOrder="@ViewData["NameSort"]">@Html.DisplayNameFor(model => model.VehicleMakes[0].Name)</a></th>
+            <th><a asp-action="Make" 
+                asp-route-SearchString="@ViewData["CurrentFilter"]"
+                asp-route-pageNumber="@Model.PageNumber"
+                asp-route-sortOrder="@ViewData["AbrvSort"]">@Html.DisplayNameFor(model => model.VehicleMakes[0].Abrv)</a>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -44,7 +61,10 @@
         @for (int i = 1; i <= Model.TotalPages; i++)
         {
             <li class="page-item @(i == Model.PageNumber ? "active" : "")">
-                <a class="page-link" asp-action="Make" asp-route-pageNumber="@i" asp-route-sortOrder="@ViewData["Sort"]">@i</a>
+                <a class="page-link" asp-action="Make" 
+                asp-route-SearchString="@ViewData["CurrentFilter"]"  
+                asp-route-pageNumber="@i" 
+                asp-route-sortOrder="@ViewData["Sort"]">@i</a>
             </li>
         }
     </ul>

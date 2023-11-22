@@ -6,7 +6,7 @@ namespace Service
 {
     public interface IVehicleMakeService
     {
-        Task<PagedList<VehicleMake>> GetAllAsync(VehicleSortOrder sortOrder, int? page = null);
+        Task<PagedList<VehicleMake>> GetAllAsync(VehicleSortOrder sortOrder, int? page = null, string? searchString = null);
         Task<bool> AddAsync(VehicleMake newMake);
         Task<VehicleMake?> GetByIdAsync(Guid? id);
         Task<bool> DeleteAsync(Guid id);

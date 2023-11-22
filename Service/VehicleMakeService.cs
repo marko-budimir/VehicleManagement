@@ -73,9 +73,13 @@ namespace Service
             return await _dbContext.VehicleMakes.FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task<PagedList<VehicleMake>> GetAllAsync(VehicleSortOrder sortOrder = VehicleSortOrder.NameAsc, int? page = null)
+        public async Task<PagedList<VehicleMake>> GetAllAsync(VehicleSortOrder sortOrder = VehicleSortOrder.NameAsc, int? page = null, string? searchString = null)
         {
             var query = _dbContext.VehicleMakes.AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchString))
+                query = query.Where(s => s.Name.Contains(searchString)
+                                       || s.Abrv.Contains(searchString));
 
             switch (sortOrder)
             {
@@ -93,12 +97,13 @@ namespace Service
                     query = query.OrderBy(m => m.Name);
                     break;
             }
+            var count = await query.CountAsync();
             if (page.HasValue)
                 query = query.Skip((int)((page - 1) * 10)).Take(10);
 
             var result = await query.ToListAsync();
 
-            return new PagedList<VehicleMake>(result, page ?? 1, 10, await _dbContext.VehicleMakes.CountAsync());
+            return new PagedList<VehicleMake>(result, page ?? 1, 10, count);
         }
 
         public async Task<bool> UpdateAsync(VehicleMake make)
