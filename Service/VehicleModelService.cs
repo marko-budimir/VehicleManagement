@@ -58,9 +58,16 @@ namespace Service
             return await _dbContext.VehicleModels.FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task<PagedList<VehicleModel>> GetAllAsync(VehicleSortOrder sortOrder = VehicleSortOrder.NameAsc, int? page = null, string? searchString = null)
+        public async Task<PagedList<VehicleModel>> GetAllAsync(
+            VehicleSortOrder sortOrder = VehicleSortOrder.NameAsc, 
+            int? page = null, 
+            string? searchString = null,
+            Guid? selectedMake = null
+            )
         {
             var query = _dbContext.VehicleModels.AsQueryable();
+            if (selectedMake.HasValue)
+                query = query.Where(m => m.VehicleMakeId == selectedMake);
 
             if (!String.IsNullOrEmpty(searchString))
                 query = query.Where(m => m.Name.Contains(searchString) || m.Abrv.Contains(searchString));

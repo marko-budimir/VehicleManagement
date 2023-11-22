@@ -21,6 +21,15 @@
     <div class="form-actions no-color">
         <p>
             Find: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            Vehicle Make: 
+            <select name="SelectedMake">
+                <option value="">All Makes</option>
+                @foreach (var make in Model.VehicleMakes)
+                {
+                    <option value="@make.Id">@make.Name</option>
+                }
+            </select>
+
             <input type="submit" value="Search" /> |
             <a asp-action="Model">Reset</a>
         </p>
@@ -31,14 +40,17 @@
         <tr>
             <th><a asp-action="Model" 
                 asp-route-SearchString="@ViewData["CurrentFilter"]"
+                asp-route-SelectedMake="@ViewData["SelectedMake"]"
                 asp-route-pageNumber="@Model.PageNumber"
                 asp-route-sortOrder="@ViewData["NameSort"]">@Html.DisplayNameFor(model => model.VehicleModels[0].Name)</a></th>
             <th><a asp-action="Model" 
                 asp-route-SearchString="@ViewData["CurrentFilter"]"
+                   asp-route-SelectedMake="@ViewData["SelectedMake"]"
                 asp-route-pageNumber="@Model.PageNumber"
                 asp-route-sortOrder="@ViewData["AbrvSort"]">@Html.DisplayNameFor(model => model.VehicleModels[0].Abrv)</a></th>
             <th><a asp-action="Model" 
                 asp-route-SearchString="@ViewData["CurrentFilter"]"
+                   asp-route-SelectedMake="@ViewData["SelectedMake"]"
                 asp-route-pageNumber="@Model.PageNumber"
                 asp-route-sortOrder="@ViewData["MakeNameSort"]">@Html.DisplayNameFor(model => model.VehicleModels[0].VehicleMake)</a></th>
         </tr>
@@ -66,6 +78,7 @@
             <li class="page-item @(i == Model.PageNumber ? "active" : "")">
                 <a class="page-link" asp-action="Model"
                    asp-route-SearchString="@ViewData["CurrentFilter"]"
+                   asp-route-SelectedMake="@ViewData["SelectedMake"]"
                    asp-route-pageNumber="@i"
                    asp-route-sortOrder="@ViewData["Sort"]">@i</a>
             </li>

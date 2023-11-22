@@ -28,15 +28,16 @@ namespace MVC.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Model(string searchString, VehicleSortOrder sortOrder = VehicleSortOrder.NameAsc, int pageNumber = 1)
+        public async Task<IActionResult> Model(string searchString, Guid? selectedMake = null, VehicleSortOrder sortOrder = VehicleSortOrder.NameAsc, int pageNumber = 1)
         {
             ViewData["NameSort"] = sortOrder == VehicleSortOrder.NameAsc ? VehicleSortOrder.NameDesc : VehicleSortOrder.NameAsc;
             ViewData["AbrvSort"] = sortOrder == VehicleSortOrder.AbrvAsc ? VehicleSortOrder.AbrvDesc : VehicleSortOrder.AbrvAsc;
             ViewData["MakeNameSort"] = sortOrder == VehicleSortOrder.MakeNameAsc ? VehicleSortOrder.MakeNameDesc : VehicleSortOrder.MakeNameAsc;
             ViewData["Sort"] = sortOrder;
             ViewData["CurrentFilter"] = searchString;
+            ViewData["SelectedMake"] = selectedMake;
 
-            var pagedVehicleModels = await _vehicleModelService.GetAllAsync(sortOrder, pageNumber, searchString);
+            var pagedVehicleModels = await _vehicleModelService.GetAllAsync(sortOrder, pageNumber, searchString, selectedMake);
             var pagedVehicleMakes = await _vehicleMakeService.GetAllAsync(VehicleSortOrder.NameAsc);
             var model = _mapper.Map<VehicleModelViewModel>(pagedVehicleModels);
             model.VehicleMakes = _mapper.Map<VehicleMakeDto[]>(pagedVehicleMakes.Items);
