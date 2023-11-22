@@ -2,6 +2,7 @@
 using Service.Data;
 using Service.Enums;
 using Service.Models;
+using Service.Utilities;
 using System.Data;
 
 namespace Service
@@ -57,9 +58,12 @@ namespace Service
             return await _dbContext.VehicleModels.FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task<VehicleModel[]> GetAllAsync(VehicleSortOrder sortOrder = VehicleSortOrder.NameAsc)
+        public async Task<PagedList<VehicleModel>> GetAllAsync(VehicleSortOrder sortOrder = VehicleSortOrder.NameAsc, int? page = null, string? searchString = null)
         {
             var query = _dbContext.VehicleModels.AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchString))
+                query = query.Where(m => m.Name.Contains(searchString) || m.Abrv.Contains(searchString));
 
             switch(sortOrder)
             {
@@ -79,10 +83,16 @@ namespace Service
                     query = query.OrderByDescending(m => m.Name);
                     break;
                 default:
-                    query = query.OrderBy(m => m.Abrv);
+                    query = query.OrderBy(m => m.Name);
                     break;
             }
-            return await query.ToArrayAsync();
+            var count = await query.CountAsync();
+            if (page.HasValue)
+                query = query.Skip((page.Value - 1) * 10).Take(10);
+
+            var result = await query.ToListAsync();
+
+            return new PagedList<VehicleModel>(result, page ?? 1, 10, count);
         }
 
         public async Task<bool> UpdateAsync(VehicleModel model)

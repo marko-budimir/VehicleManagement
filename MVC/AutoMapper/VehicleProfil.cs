@@ -13,6 +13,8 @@ namespace MVC.AutoMapper
             CreateMap<VehicleModel, VehicleModelDto>().ReverseMap();
             CreateMap<PagedList<VehicleMake>, VehicleMakeViewModel>()
                 .ForMember(dest => dest.VehicleMakes, opt => opt.MapFrom(src => src.Items));
+            CreateMap<PagedList<VehicleModel>, VehicleModelViewModel>()
+                .ForMember(dest => dest.VehicleModels, opt => opt.MapFrom(src => src.Items));
         }
     }
 }

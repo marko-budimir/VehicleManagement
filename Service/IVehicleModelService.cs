@@ -1,11 +1,13 @@
-﻿using Service.Enums;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Service.Enums;
 using Service.Models;
+using Service.Utilities;
 
 namespace Service
 {
     public interface IVehicleModelService
     {
-        Task<VehicleModel[]> GetAllAsync(VehicleSortOrder sortOrder);
+        Task<PagedList<VehicleModel>> GetAllAsync(VehicleSortOrder sortOrder, int? page = null, string? searchString = null);
         Task<bool> AddAsync(VehicleModel newModel);
         Task<VehicleModel?> GetByIdAsync(Guid? id);
         Task<bool> DeleteAsync(Guid id);

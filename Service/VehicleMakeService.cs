@@ -78,8 +78,7 @@ namespace Service
             var query = _dbContext.VehicleMakes.AsQueryable();
 
             if (!String.IsNullOrEmpty(searchString))
-                query = query.Where(s => s.Name.Contains(searchString)
-                                       || s.Abrv.Contains(searchString));
+                query = query.Where(s => s.Name.Contains(searchString) || s.Abrv.Contains(searchString));
 
             switch (sortOrder)
             {
