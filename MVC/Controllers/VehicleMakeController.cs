@@ -19,16 +19,14 @@ namespace MVC.Controllers
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> Make(VehicleSortOrder sortOrder = VehicleSortOrder.NameAsc)
+        public async Task<IActionResult> Make(VehicleSortOrder sortOrder = VehicleSortOrder.NameAsc, int pageNumber = 1)
         {
-            ViewData["NameSort"] = sortOrder == VehicleSortOrder.NameDesc ? VehicleSortOrder.NameAsc : VehicleSortOrder.NameDesc;
-            ViewData["AbrvSort"] = sortOrder == VehicleSortOrder.AbrvDesc ? VehicleSortOrder.AbrvAsc : VehicleSortOrder.AbrvDesc;   
+            ViewData["NameSort"] = sortOrder == VehicleSortOrder.NameAsc ? VehicleSortOrder.NameDesc : VehicleSortOrder.NameAsc;
+            ViewData["AbrvSort"] = sortOrder == VehicleSortOrder.AbrvAsc ? VehicleSortOrder.AbrvDesc : VehicleSortOrder.AbrvAsc;
+            ViewData["Sort"] = sortOrder;
 
-            var vehicleMakes = await _vehicleMakeService.GetAllAsync(sortOrder);
-            var model = new VehicleMakeViewModel
-            {
-                VehicleMakes = _mapper.Map<VehicleMakeDto[]>(vehicleMakes)
-            };
+            var paggedVehicleMakes = await _vehicleMakeService.GetAllAsync(sortOrder, pageNumber);
+            var model = _mapper.Map<VehicleMakeViewModel>(paggedVehicleMakes);
             return View(model);
         }
 

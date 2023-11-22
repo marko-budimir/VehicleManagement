@@ -20,8 +20,8 @@
 <table class="table">
     <thead>
         <tr>
-            <th><a asp-action="Make" asp-route-sortOrder="@ViewData["NameSort"]">@Html.DisplayNameFor(model => model.VehicleMakes[0].Name)</a></th>
-            <th><a asp-action="Make" asp-route-sortOrder="@ViewData["AbrvSort"]">@Html.DisplayNameFor(model => model.VehicleMakes[0].Abrv)</a></th>
+            <th><a asp-action="Make" asp-route-pageNumber="@Model.PageNumber" asp-route-sortOrder="@ViewData["NameSort"]">@Html.DisplayNameFor(model => model.VehicleMakes[0].Name)</a></th>
+            <th><a asp-action="Make" asp-route-pageNumber="@Model.PageNumber" asp-route-sortOrder="@ViewData["AbrvSort"]">@Html.DisplayNameFor(model => model.VehicleMakes[0].Abrv)</a></th>
         </tr>
     </thead>
     <tbody>
@@ -38,3 +38,14 @@
         }
     </tbody>
 </table>
+<div>
+    Page @(Model.PageNumber) of @Model.TotalPages
+    <ul class="pagination">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                <a class="page-link" asp-action="Make" asp-route-pageNumber="@i" asp-route-sortOrder="@ViewData["Sort"]">@i</a>
+            </li>
+        }
+    </ul>
+</div>

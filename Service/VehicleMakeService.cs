@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Service.Data;
 using Service.Enums;
 using Service.Models;
+using Service.Utilities;
 using System.Data;
+using System.Linq;
 
 namespace Service
 {
@@ -71,7 +73,7 @@ namespace Service
             return await _dbContext.VehicleMakes.FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task<VehicleMake[]> GetAllAsync(VehicleSortOrder sortOrder = VehicleSortOrder.NameAsc)
+        public async Task<PagedList<VehicleMake>> GetAllAsync(VehicleSortOrder sortOrder = VehicleSortOrder.NameAsc, int? page = null)
         {
             var query = _dbContext.VehicleMakes.AsQueryable();
 
@@ -91,8 +93,12 @@ namespace Service
                     query = query.OrderBy(m => m.Name);
                     break;
             }
+            if (page.HasValue)
+                query = query.Skip((int)((page - 1) * 10)).Take(10);
 
-            return await query.ToArrayAsync();
+            var result = await query.ToListAsync();
+
+            return new PagedList<VehicleMake>(result, page ?? 1, 10, await _dbContext.VehicleMakes.CountAsync());
         }
 
         public async Task<bool> UpdateAsync(VehicleMake make)

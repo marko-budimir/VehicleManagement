@@ -35,11 +35,11 @@ namespace MVC.Controllers
             ViewData["MakeNameSort"] = sortOrder == VehicleSortOrder.MakeNameDesc ? VehicleSortOrder.MakeNameAsc : VehicleSortOrder.MakeNameDesc;
 
             var vehicleModels = await _vehicleModelService.GetAllAsync(sortOrder);
-            var vehicleMakes = await _vehicleMakeService.GetAllAsync(VehicleSortOrder.NameAsc);
+            var pagedVehicleMakes = await _vehicleMakeService.GetAllAsync(VehicleSortOrder.NameAsc);
             var model = new VehicleModelViewModel
             {
                 VehicleModels = _mapper.Map<VehicleModelDto[]>(vehicleModels),
-                VehicleMakes = _mapper.Map<VehicleMakeDto[]>(vehicleMakes)
+                VehicleMakes = _mapper.Map<VehicleMakeDto[]>(pagedVehicleMakes.Items)
             };
             return View(model);
         }
@@ -91,9 +91,9 @@ namespace MVC.Controllers
             {
                 return NotFound();
             }
-            var vehicleMake = await _vehicleMakeService.GetAllAsync(VehicleSortOrder.NameAsc);
+            var pagedVehicleMakes = await _vehicleMakeService.GetAllAsync(VehicleSortOrder.NameAsc);
             VehicleModelDto modelDto = _mapper.Map<VehicleModelDto>(model);
-            modelDto.vehicleMakes = _mapper.Map<VehicleMakeDto[]>(vehicleMake);
+            modelDto.vehicleMakes = _mapper.Map<VehicleMakeDto[]>(pagedVehicleMakes.Items);
             return View(modelDto);
         }
 
