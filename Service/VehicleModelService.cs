@@ -40,7 +40,13 @@ namespace Service
 
         public async Task<bool> DeleteAsync(Guid id)
         {
-            _dbContext.VehicleModels.Remove(new VehicleModel { Id = id });
+            var model = await _dbContext.VehicleModels.FirstOrDefaultAsync(m => m.Id == id);
+            if (model == null)
+            {
+                return false;
+            }
+
+            _dbContext.VehicleModels.Remove(model);
 
             try
             {
