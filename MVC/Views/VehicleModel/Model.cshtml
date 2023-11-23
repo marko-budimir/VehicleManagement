@@ -1,4 +1,7 @@
-﻿@model VehicleModelViewModel
+﻿@using Microsoft.AspNetCore.Identity
+@using MVC.Utilities;
+
+@model VehicleModelViewModel
 
 @{
     ViewData["Title"] = "Vehicle Model";
@@ -13,15 +16,16 @@
 }
 
 <h1>Vehicle Model</h1>
-
-<p>
-    @await Html.PartialAsync("AddVehicleModel", new VehicleModelDto(Model.VehicleMakes))
-</p>
+@if (User.IsInRole(UserConstants.AdminRole))
+{
+    <p>
+        @await Html.PartialAsync("AddVehicleModel", new VehicleModelDto(Model.VehicleMakes))
+    </p>
+} 
 <form asp-action="Model" method="get">
     <div class="form-actions no-color">
         <p>
-            Find: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-            Vehicle Make: 
+            Find: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" /> 
             <select name="SelectedMake">
                 <option value="">All Makes</option>
                 @foreach (var make in Model.VehicleMakes)
@@ -62,10 +66,13 @@
                 <td>@item.Name</td>
                 <td>@item.Abrv</td>
                 <td>@if (item.VehicleMake != null) { @item.VehicleMake.Abrv}</td>
-                <td>
-                    @Html.ActionLink("Edit", "EditVehicleModel", new { id=item.Id }) |
-                    @Html.ActionLink("Delete", "DeleteVehicleModel", new { id=item.Id })
-                </td>
+                @if (User.IsInRole(UserConstants.AdminRole))
+                {
+                    <td>
+                        @Html.ActionLink("Edit", "EditVehicleModel", new { id=item.Id }) |
+                        @Html.ActionLink("Delete", "DeleteVehicleModel", new { id=item.Id })
+                    </td>
+                }
             </tr>
         }
     </tbody>

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 using Service;
@@ -44,6 +45,7 @@ namespace MVC.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddVehicleModel(VehicleModelDto newModel)
         {
@@ -74,6 +76,7 @@ namespace MVC.Controllers
             return RedirectToAction("Model");
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteVehicleModel(Guid id)
         {
             var successful = await _vehicleModelService.DeleteAsync(id);
@@ -84,6 +87,7 @@ namespace MVC.Controllers
             return RedirectToAction("Model");
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditVehicleModel(Guid id)
         {
             var model = await _vehicleModelService.GetByIdAsync(id);
@@ -97,6 +101,7 @@ namespace MVC.Controllers
             return View(modelDto);
         }
 
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateVehicleModel(VehicleModelDto modelDto)
         {

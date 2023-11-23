@@ -1,4 +1,7 @@
-﻿@model VehicleMakeViewModel
+﻿@using Microsoft.AspNetCore.Identity
+@using MVC.Utilities;
+
+@model VehicleMakeViewModel
 
 @{
     ViewData["Title"] = "Vehicle Make";
@@ -14,9 +17,13 @@
 
 <h1>Vehicle Make</h1>
 
-<p>
-    @await Html.PartialAsync("AddVehicleMake", new VehicleMakeDto())
-</p>
+@if (User.IsInRole(UserConstants.AdminRole)) 
+{
+    <p>
+        @await Html.PartialAsync("AddVehicleMake", new VehicleMakeDto())
+    </p>
+}
+
 <form asp-action="Make" method="get">
     <div class="form-actions no-color">
         <p>
@@ -47,10 +54,13 @@
             <tr>
                 <td>@item.Name</td>
                 <td>@item.Abrv</td>
-                <td>
-                    @Html.ActionLink("Edit", "EditVehicleMake", new { id=item.Id }) |
-                    @Html.ActionLink("Delete", "DeleteVehicleMake", new { id=item.Id })
-                </td>
+                @if (User.IsInRole(UserConstants.AdminRole))
+                {
+                    <td>
+                        @Html.ActionLink("Edit", "EditVehicleMake", new { id=item.Id }) |
+                        @Html.ActionLink("Delete", "DeleteVehicleMake", new { id=item.Id })
+                    </td>
+                }
             </tr>
         }
     </tbody>
