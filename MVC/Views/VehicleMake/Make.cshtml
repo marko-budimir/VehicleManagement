@@ -5,7 +5,7 @@
 
 @{
     ViewData["Title"] = "Vehicle Make";
-    var errorMessage = TempData["ErrorMessage"] as string;
+    var errorMessage = TempData[ControllerConstants.ErrorMessageData] as string;
 }
 
 @if (!string.IsNullOrEmpty(errorMessage))
@@ -27,7 +27,7 @@
 <form asp-action="Make" method="get">
     <div class="form-actions no-color">
         <p>
-            Find: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            Find: <input type="text" name="SearchString" value="@ViewData[ControllerConstants.CurrentFilterData]" />
             <input type="submit" value="Search" /> |
             <a asp-action="Make">Reset</a>
         </p>
@@ -38,13 +38,14 @@
         <tr>
             <th>
                 <a asp-action="Make"
-                asp-route-SearchString="@ViewData["CurrentFilter"]"
-                asp-route-pageNumber="@Model.PageNumber" 
-                asp-route-sortOrder="@ViewData["NameSort"]">@Html.DisplayNameFor(model => model.VehicleMakes[0].Name)</a></th>
-            <th><a asp-action="Make" 
-                asp-route-SearchString="@ViewData["CurrentFilter"]"
+                   asp-route-SearchString="@ViewData[ControllerConstants.CurrentFilterData]"
                 asp-route-pageNumber="@Model.PageNumber"
-                asp-route-sortOrder="@ViewData["AbrvSort"]">@Html.DisplayNameFor(model => model.VehicleMakes[0].Abrv)</a>
+                   asp-route-sortOrder="@ViewData[ControllerConstants.NameSortData]">@Html.DisplayNameFor(model => model.VehicleMakes[0].Name)</a>
+            </th>
+            <th><a asp-action="Make"
+                   asp-route-SearchString="@ViewData[ControllerConstants.CurrentFilterData]"
+                asp-route-pageNumber="@Model.PageNumber"
+                   asp-route-sortOrder="@ViewData[ControllerConstants.AbrvSortData]">@Html.DisplayNameFor(model => model.VehicleMakes[0].Abrv)</a>
             </th>
         </tr>
     </thead>
@@ -57,7 +58,7 @@
                 @if (User.IsInRole(UserConstants.AdminRole))
                 {
                     <td>
-                        @Html.ActionLink("Edit", "EditVehicleMake", new { id=item.Id }) |
+                        @Html.ActionLink("Edit", ControllerConstants.ActionNameEditMake, new { id=item.Id }) |
                         @Html.ActionLink("Delete", "DeleteVehicleMake", new { id=item.Id })
                     </td>
                 }
@@ -71,10 +72,10 @@
         @for (int i = 1; i <= Model.TotalPages; i++)
         {
             <li class="page-item @(i == Model.PageNumber ? "active" : "")">
-                <a class="page-link" asp-action="Make" 
-                asp-route-SearchString="@ViewData["CurrentFilter"]"  
-                asp-route-pageNumber="@i" 
-                asp-route-sortOrder="@ViewData["Sort"]">@i</a>
+                <a class="page-link" asp-action="Make"
+                   asp-route-SearchString="@ViewData[ControllerConstants.CurrentFilterData]"
+                   asp-route-pageNumber="@i"
+                   asp-route-sortOrder="@ViewData[ControllerConstants.SortData]">@i</a>
             </li>
         }
     </ul>

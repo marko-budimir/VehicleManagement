@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
+using MVC.Utilities;
 using Service;
 using Service.Enums;
 using Service.Models;
@@ -11,6 +12,9 @@ namespace MVC.Controllers
 {
     public class VehicleMakeController : Controller
     {
+        private const string ActionName = ControllerConstants.ActionNameMake;
+        private const string ActionNameEdit = ControllerConstants.ActionNameEditMake;
+        private const string ErrorMessageData = ControllerConstants.ErrorMessageData;
         private readonly IVehicleMakeService _vehicleMakeService;
         private readonly IMapper _mapper;
 
@@ -22,23 +26,23 @@ namespace MVC.Controllers
 
         public async Task<IActionResult> Make(string searchString,VehicleSortOrder sortOrder = VehicleSortOrder.NameAsc, int pageNumber = 1)
         {
-            ViewData["NameSort"] = sortOrder == VehicleSortOrder.NameAsc ? VehicleSortOrder.NameDesc : VehicleSortOrder.NameAsc;
-            ViewData["AbrvSort"] = sortOrder == VehicleSortOrder.AbrvAsc ? VehicleSortOrder.AbrvDesc : VehicleSortOrder.AbrvAsc;
-            ViewData["Sort"] = sortOrder;
-            ViewData["CurrentFilter"] = searchString;
+            ViewData[ControllerConstants.NameSortData] = sortOrder == VehicleSortOrder.NameAsc ? VehicleSortOrder.NameDesc : VehicleSortOrder.NameAsc;
+            ViewData[ControllerConstants.AbrvSortData] = sortOrder == VehicleSortOrder.AbrvAsc ? VehicleSortOrder.AbrvDesc : VehicleSortOrder.AbrvAsc;
+            ViewData[ControllerConstants.SortData] = sortOrder;
+            ViewData[ControllerConstants.CurrentFilterData] = searchString;
 
             var paggedVehicleMakes = await _vehicleMakeService.GetAllAsync(sortOrder, pageNumber, searchString);
             var model = _mapper.Map<VehicleMakeViewModel>(paggedVehicleMakes);
             return View(model);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles =  UserConstants.AdminRole)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddVehicleMake(VehicleMakeDto newMake)
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Make");
+                return RedirectToAction(ActionName);
             }
             VehicleMake make = _mapper.Map<VehicleMake>(newMake);
             var successful = false;
@@ -48,22 +52,22 @@ namespace MVC.Controllers
             }
             catch (DuplicateNameException e)
             {
-                TempData["ErrorMessage"] = e.Message;
-                return RedirectToAction("Make");
+                TempData[ErrorMessageData] = e.Message;
+                return RedirectToAction(ActionName);
             }
             catch (Exception e)
             {
-                TempData["ErrorMessage"] = e.Message;
-                return RedirectToAction("Make");
+                TempData[ErrorMessageData] = e.Message;
+                return RedirectToAction(ActionName);
             }
             if (!successful)
             {
                 return BadRequest("Could not add make.");
             }
-            return RedirectToAction("Make");
+            return RedirectToAction(ActionName);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = UserConstants.AdminRole)]
         public async Task<IActionResult> DeleteVehicleMake(Guid id)
         {
             var successful = await _vehicleMakeService.DeleteAsync(id);
@@ -71,10 +75,10 @@ namespace MVC.Controllers
             {
                 return BadRequest(new { error = "Could not delete make." });
             }
-            return RedirectToAction("Make");
+            return RedirectToAction(ActionName);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = UserConstants.AdminRole)]
         public async Task<IActionResult> EditVehicleMake(Guid id)
         {
             var make = await _vehicleMakeService.GetByIdAsync(id);
@@ -86,13 +90,13 @@ namespace MVC.Controllers
             return View(makeDto);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = UserConstants.AdminRole)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateVehicleMake(VehicleMakeDto makeDto)
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("EditVehicleMake", new { id = makeDto.Id });
+                return RedirectToAction(ActionNameEdit, new { id = makeDto.Id });
             }
 
             var successful = false;
@@ -103,14 +107,14 @@ namespace MVC.Controllers
             }
             catch (Exception e)
             {
-                TempData["ErrorMessage"] = e.Message;
-                return RedirectToAction("EditVehicleMake", new { id = makeDto.Id });
+                TempData[ErrorMessageData] = e.Message;
+                return RedirectToAction(ActionNameEdit, new { id = makeDto.Id });
             }
             if (!successful)
             {
                 return BadRequest(new { error = "Could not update make." });
             }
-            return RedirectToAction("Make");
+            return RedirectToAction(ActionName);
         }
     }
 }

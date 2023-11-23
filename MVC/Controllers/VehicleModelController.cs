@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
+using MVC.Utilities;
 using Service;
 using Service.Enums;
 using Service.Models;
@@ -12,6 +13,9 @@ namespace MVC.Controllers
 {
     public class VehicleModelController : Controller
     {
+        private const string ActionNameModel = ControllerConstants.ActionNameModel;
+        private const string ActionNameEdit = ControllerConstants.ActionNameEditModel;
+        private const string ErrorMessageData = ControllerConstants.ErrorMessageData;
         private readonly IVehicleModelService _vehicleModelService;
         private readonly IVehicleMakeService _vehicleMakeService;
         private readonly IMapper _mapper;
@@ -31,12 +35,12 @@ namespace MVC.Controllers
 
         public async Task<IActionResult> Model(string searchString, Guid? selectedMake = null, VehicleSortOrder sortOrder = VehicleSortOrder.NameAsc, int pageNumber = 1)
         {
-            ViewData["NameSort"] = sortOrder == VehicleSortOrder.NameAsc ? VehicleSortOrder.NameDesc : VehicleSortOrder.NameAsc;
-            ViewData["AbrvSort"] = sortOrder == VehicleSortOrder.AbrvAsc ? VehicleSortOrder.AbrvDesc : VehicleSortOrder.AbrvAsc;
-            ViewData["MakeNameSort"] = sortOrder == VehicleSortOrder.MakeNameAsc ? VehicleSortOrder.MakeNameDesc : VehicleSortOrder.MakeNameAsc;
-            ViewData["Sort"] = sortOrder;
-            ViewData["CurrentFilter"] = searchString;
-            ViewData["SelectedMake"] = selectedMake;
+            ViewData[ControllerConstants.NameSortData] = sortOrder == VehicleSortOrder.NameAsc ? VehicleSortOrder.NameDesc : VehicleSortOrder.NameAsc;
+            ViewData[ControllerConstants.AbrvSortData] = sortOrder == VehicleSortOrder.AbrvAsc ? VehicleSortOrder.AbrvDesc : VehicleSortOrder.AbrvAsc;
+            ViewData[ControllerConstants.MakeNameSortData] = sortOrder == VehicleSortOrder.MakeNameAsc ? VehicleSortOrder.MakeNameDesc : VehicleSortOrder.MakeNameAsc;
+            ViewData[ControllerConstants.SortData] = sortOrder;
+            ViewData[ControllerConstants.CurrentFilterData] = searchString;
+            ViewData[ControllerConstants.SelectedMakeData] = selectedMake;
 
             var pagedVehicleModels = await _vehicleModelService.GetAllAsync(sortOrder, pageNumber, searchString, selectedMake);
             var pagedVehicleMakes = await _vehicleMakeService.GetAllAsync(VehicleSortOrder.NameAsc);
@@ -45,13 +49,13 @@ namespace MVC.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = UserConstants.AdminRole)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddVehicleModel(VehicleModelDto newModel)
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Model");
+                return RedirectToAction(ActionNameModel);
             }
             VehicleModel model = _mapper.Map<VehicleModel>(newModel);
             var successful = false;
@@ -61,22 +65,22 @@ namespace MVC.Controllers
             }
             catch (DuplicateNameException e)
             {
-                TempData["ErrorMessage"] = e.Message;
-                return RedirectToAction("Model");
+                TempData[ErrorMessageData] = e.Message;
+                return RedirectToAction(ActionNameModel);
             }
             catch (Exception e)
             {
-                TempData["ErrorMessage"] = e.Message;
-                return RedirectToAction("Model");
+                TempData[ErrorMessageData] = e.Message;
+                return RedirectToAction(ActionNameModel);
             }
             if (!successful)
             {
                 return BadRequest(new { error = "Could not add model." });
             }
-            return RedirectToAction("Model");
+            return RedirectToAction(ActionNameModel);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = UserConstants.AdminRole)]
         public async Task<IActionResult> DeleteVehicleModel(Guid id)
         {
             var successful = await _vehicleModelService.DeleteAsync(id);
@@ -84,10 +88,10 @@ namespace MVC.Controllers
             {
                 return BadRequest(new { error = "Could not delete model." });
             }
-            return RedirectToAction("Model");
+            return RedirectToAction(ActionNameModel);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = UserConstants.AdminRole)]
         public async Task<IActionResult> EditVehicleModel(Guid id)
         {
             var model = await _vehicleModelService.GetByIdAsync(id);
@@ -101,13 +105,13 @@ namespace MVC.Controllers
             return View(modelDto);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = UserConstants.AdminRole)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateVehicleModel(VehicleModelDto modelDto)
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("EditVehicleModel", new { id = modelDto.Id });
+                return RedirectToAction(ActionNameEdit, new { id = modelDto.Id });
             }
             var successful = false;
             try
@@ -118,14 +122,14 @@ namespace MVC.Controllers
             }
             catch (Exception e)
             {
-                TempData["ErrorMessage"] = e.Message;
-                return RedirectToAction("EditVehicleModel", new { id = modelDto.Id });
+                TempData[ErrorMessageData] = e.Message;
+                return RedirectToAction(ActionNameEdit, new { id = modelDto.Id });
             }
             if (!successful)
             {
                 return BadRequest(new { error = "Could not update model." });
             }
-            return RedirectToAction("Model");
+            return RedirectToAction(ActionNameModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
