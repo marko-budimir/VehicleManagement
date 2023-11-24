@@ -1,16 +1,25 @@
 ﻿@model VehicleModelDto
 
-<form asp-action="AddVehicleModel" method="POST">
-    <label asp-for="Name">Name:</label>
-    <input asp-for="Name">
-    <br />
-    <label asp-for="Abrv">Abrv:</label>
-    <input asp-for="Abrv">
-    <br />
-    <label asp-for="VehicleMakeId">VehicleMake:</label>
-    <select asp-for="VehicleMakeId" asp-items="@(new SelectList(Model.vehicleMakes, "Id", "Name"))">
-        <option value="">-- Select Vehicle Make --</option>
-    </select>
-    <br />
-    <button type="submit">Add</button>
-</form>
+<div class="card mt-3 col-md-6">
+    <div class="card-body">
+        <h4 class="card-title">Add Vehicle Model</h4>
+
+        <form asp-action="AddVehicleModel" method="POST">
+            <div class="form-group">
+                <label asp-for="Name">Name:</label>
+                <input asp-for="Name" class="form-control">
+            </div>
+            <div class="form-group">
+                <label asp-for="Abrv">Abrv:</label>
+                <input asp-for="Abrv" class="form-control">
+            </div>
+            <div class="form-group">
+                <label asp-for="VehicleMakeId">Vehicle Make:</label>
+                <select asp-for="VehicleMakeId" class="form-control" asp-items="@(new SelectList(Model.vehicleMakes, "Id", "Name"))">
+                    <option value="">-- Select Vehicle Make --</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
+</div>

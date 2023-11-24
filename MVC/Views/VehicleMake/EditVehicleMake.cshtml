@@ -12,13 +12,20 @@
     </script>
 }
 
-<h1>Edit Vehicle Make</h1>
-<form asp-action="UpdateVehicleMake" method="post" asp-route-id="@Model.Id">
-    <label asp-for="Name">Name:</label>
-    <input asp-for="Name" value="@Model.Name">
-    <br />
-    <label asp-for="Abrv">Abrv:</label>
-    <input asp-for="Abrv" value="@Model.Abrv">
-    <br />
-    <button type="submit">Apply</button>
-</form>
+<div class="card mt-3">
+    <div class="card-body col-md-6">
+        <h4 class="card-title">Edit Vehicle Make</h4>
+
+        <form asp-action="UpdateVehicleMake" method="post" asp-route-id="@Model.Id">
+            <div class="form-group">
+                <label asp-for="Name">Name:</label>
+                <input asp-for="Name" class="form-control" value="@Model.Name">
+            </div>
+            <div class="form-group">
+                <label asp-for="Abrv">Abrv:</label>
+                <input asp-for="Abrv" class="form-control" value="@Model.Abrv">
+            </div>
+            <button type="submit" class="btn btn-primary">Apply</button>
+        </form>
+    </div>
+</div>

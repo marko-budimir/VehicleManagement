@@ -12,17 +12,26 @@
     </script>
 }
 
-<h1>Edit Vehicle Model</h1>
-<form asp-action="UpdateVehicleModel" method="post" asp-route-id="@Model.Id">
-    <label asp-for="Name">Name:</label>
-    <input asp-for="Name" value="@Model.Name">
-    <br />
-    <label asp-for="Abrv">Abrv:</label>
-    <input asp-for="Abrv" value="@Model.Abrv">
-    <br />
-    <select asp-for="VehicleMakeId" asp-items="@(new SelectList(Model.vehicleMakes, "Id", "Name"))">
-        <option value="">-- Select Vehicle Make --</option>
-    </select>
-    <br />
-    <button type="submit">Apply</button>
-</form>
+<div class="card mt-3 ">
+    <div class="card-body col-md-6">
+        <h4 class="card-title">Edit Vehicle Model</h4>
+
+        <form asp-action="UpdateVehicleModel" method="post" asp-route-id="@Model.Id">
+            <div class="form-group">
+                <label asp-for="Name">Name:</label>
+                <input asp-for="Name" class="form-control" value="@Model.Name">
+            </div>
+            <div class="form-group">
+                <label asp-for="Abrv">Abrv:</label>
+                <input asp-for="Abrv" class="form-control" value="@Model.Abrv">
+            </div>
+            <div class="form-group">
+                <label asp-for="VehicleMakeId">Vehicle Make:</label>
+                <select asp-for="VehicleMakeId" class="form-control" asp-items="@(new SelectList(Model.vehicleMakes, "Id", "Name"))">
+                    <option value="">-- Select Vehicle Make --</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Apply</button>
+        </form>
+    </div>
+</div>

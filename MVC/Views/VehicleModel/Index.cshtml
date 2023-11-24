@@ -2,8 +2,15 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
+<div class="container text-center mt-5">
     <h1 class="display-4">Welcome</h1>
-    <p><a asp-area="" asp-controller="VehicleModel" asp-action="Model">Vehicle Model</a></p>
-    <p><a asp-area="" asp-controller="VehicleMake" asp-action="Make">Vehicle Make</a></p>
+    <p class="lead">Explore our Vehicle Database:</p>
+    <div class="row">
+        <div class="col-md-6">
+            <a href="@Url.Action("Model", "VehicleModel", new { area = "" })" class="btn btn-secondary btn-lg btn-block">Vehicle Models</a>
+        </div>
+        <div class="col-md-6">
+            <a href="@Url.Action("Make", "VehicleMake", new { area = "" })" class="btn btn-secondary btn-lg btn-block">Vehicle Makes</a>
+        </div>
+    </div>
 </div>
